@@ -12,7 +12,6 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Share,
   FlatList,
   Pressable,
   GestureResponderEvent,
@@ -24,7 +23,6 @@ import * as Sharing from 'expo-sharing';
 const width = Dimensions.get("window").width;
 
 const Gallery = () => {
-  // Component state and functions remain unchanged...
   const { photos, saveToGallery, deletePhoto } = usePhotoContext();
   const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
@@ -226,7 +224,6 @@ const Gallery = () => {
     return (
       <View style={styles.photoRow}>
         {row.photos.map((photo: PhotoData, photoIndex: number) => {
-          const globalIndex = row.startIndex + photoIndex;
           const isSelected = selectedIds.includes(photo.id);
           const isLastInRow = photoIndex === row.photos.length - 1;
 
