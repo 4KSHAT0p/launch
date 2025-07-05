@@ -200,66 +200,76 @@ const Gallery = () => {
     }
   };
 
-  // Calculate dynamic columns and item width
-  const getColumnsAndWidth = () => {
-    const totalPhotos = photos.length;
-    let numColumns = 3;
-
-    if (totalPhotos === 1) {
-      numColumns = 1;
-    } else if (totalPhotos === 2) {
-      numColumns = 2;
+  // Calculate rows with dynamic sizing
+  const getPhotoRows = () => {
+    const rows = [];
+    const maxColumns = 3;
+    
+    for (let i = 0; i < photos.length; i += maxColumns) {
+      const rowPhotos = photos.slice(i, i + maxColumns);
+      const photosInRow = rowPhotos.length;
+      const photoWidth = (width - 48 - (photosInRow - 1) * 8) / photosInRow; // Account for margins
+      
+      rows.push({
+        photos: rowPhotos,
+        width: photoWidth,
+        startIndex: i
+      });
     }
-
-    const itemWidth = (width - 48) / numColumns;
-    const marginRight = 8;
-
-    return { numColumns, itemWidth, marginRight };
+    
+    return rows;
   };
 
-  const { numColumns, itemWidth } = getColumnsAndWidth();
+  const photoRows = getPhotoRows();
 
-  const renderPhotoItem = ({ item, index }: { item: PhotoData; index: number }) => {
-    const isSelected = selectedIds.includes(item.id);
-    const isLastInRow = (index + 1) % numColumns === 0;
-
+  const renderPhotoRow = ({ item: row, index: rowIndex }: { item: any; index: number }) => {
     return (
-      <Pressable
-        onPress={() => handleThumbnailPress(item.id)}
-        onLongPress={() => handleThumbnailLongPress(item.id)}
-        style={[
-          styles.photoCard,
-          {
-            width: itemWidth,
-            height: itemWidth * 0.8,
-            marginRight: isLastInRow ? 0 : 8,
-            marginBottom: 12,
-            borderWidth: isSelected ? 3 : 0,
-            borderColor: isSelected ? "#667eea" : "transparent",
-            opacity: actionMode && !isSelected ? 0.5 : 1,
-          }
-        ]}
-      >
-        <Image
-          source={{ uri: item.uri }}
-          style={styles.thumbnail}
-          resizeMode="cover"
-        />
-        <View style={styles.cardOverlay} />
-        {item.address && (
-          <View style={styles.addressTag}>
-            <Ionicons name="location" size={12} color="white" />
-            <Text style={styles.addressText} numberOfLines={1}>
-              {item.address}
-            </Text>
-          </View>
-        )}
-        {actionMode && isSelected && (
-          <View style={styles.selectedTick}>
-            <Ionicons name="checkmark-circle" size={24} color="#667eea" />
-          </View>
-        )}
-      </Pressable>
+      <View style={styles.photoRow}>
+        {row.photos.map((photo: PhotoData, photoIndex: number) => {
+          const globalIndex = row.startIndex + photoIndex;
+          const isSelected = selectedIds.includes(photo.id);
+          const isLastInRow = photoIndex === row.photos.length - 1;
+
+          return (
+            <Pressable
+              key={photo.id}
+              onPress={() => handleThumbnailPress(photo.id)}
+              onLongPress={() => handleThumbnailLongPress(photo.id)}
+              style={[
+                styles.photoCard,
+                {
+                  width: row.width,
+                  height: row.width * 0.8,
+                  marginRight: isLastInRow ? 0 : 8,
+                  borderWidth: isSelected ? 3 : 0,
+                  borderColor: isSelected ? "#667eea" : "transparent",
+                  opacity: actionMode && !isSelected ? 0.5 : 1,
+                }
+              ]}
+            >
+              <Image
+                source={{ uri: photo.uri }}
+                style={styles.thumbnail}
+                resizeMode="cover"
+              />
+              <View style={styles.cardOverlay} />
+              {photo.address && (
+                <View style={styles.addressTag}>
+                  <Ionicons name="location" size={12} color="white" />
+                  <Text style={styles.addressText} numberOfLines={1}>
+                    {photo.address}
+                  </Text>
+                </View>
+              )}
+              {actionMode && isSelected && (
+                <View style={styles.selectedTick}>
+                  <Ionicons name="checkmark-circle" size={24} color="#667eea" />
+                </View>
+              )}
+            </Pressable>
+          );
+        })}
+      </View>
     );
   };
 
@@ -325,14 +335,12 @@ const Gallery = () => {
 
       <View style={styles.scrollContent}>
         <FlatList
-          data={photos}
-          renderItem={renderPhotoItem}
-          keyExtractor={item => item.id}
-          numColumns={numColumns}
-          key={numColumns} // Force re-render when columns change
+          data={photoRows}
+          renderItem={renderPhotoRow}
+          keyExtractor={(item, index) => `row-${index}`}
           scrollEnabled
           showsVerticalScrollIndicator={false}
-          extraData={{ actionMode, selectedIds, numColumns }}
+          extraData={{ actionMode, selectedIds }}
         />
       </View>
 
@@ -657,6 +665,10 @@ const styles = StyleSheet.create({
   },
   spacer: {
     flex: 1,
+  },
+  photoRow: {
+    flexDirection: 'row',
+    marginBottom: 12,
   },
 });
 
