@@ -202,19 +202,19 @@ const Gallery = () => {
   const getPhotoRows = () => {
     const rows = [];
     const maxColumns = 3;
-    
+
     for (let i = 0; i < photos.length; i += maxColumns) {
       const rowPhotos = photos.slice(i, i + maxColumns);
       const photosInRow = rowPhotos.length;
       const photoWidth = (width - 48 - (photosInRow - 1) * 8) / photosInRow; // Account for margins
-      
+
       rows.push({
         photos: rowPhotos,
         width: photoWidth,
         startIndex: i
       });
     }
-    
+
     return rows;
   };
 
@@ -412,24 +412,22 @@ const Gallery = () => {
                     <Text style={styles.infoText} numberOfLines={1}>{currentPhoto.weather}</Text>
                   </View>
                 )}
-              </View>
-
-              {/* Save button */}
-              <View style={styles.actionButtonContainer}>
-                <TouchableOpacity
-                  style={styles.actionButton}
-                  onPress={() => handleSaveToDevice(currentPhoto.id)}
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <ActivityIndicator color="white" size="small" />
-                  ) : (
-                    <>
-                      <Ionicons name="download" size={20} color="white" />
-                      <Text style={styles.actionButtonText}>Save to Device</Text>
-                    </>
-                  )}
-                </TouchableOpacity>
+                <View style={styles.actionButtonContainer}>
+                  <TouchableOpacity
+                    style={styles.actionButton}
+                    onPress={() => handleSaveToDevice(currentPhoto.id)}
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      <ActivityIndicator color="white" size="small" />
+                    ) : (
+                      <>
+                        <Ionicons name="download" size={20} color="white" />
+                        <Text style={styles.actionButtonText}>Save to Device</Text>
+                      </>
+                    )}
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
           </ViewShot>

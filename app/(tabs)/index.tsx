@@ -19,7 +19,6 @@ import {
 } from "react-native";
 import { PhotoData, usePhotoContext } from "../context/PhotoContext";
 import { useTabBarVisibilityContext } from "../context/TabBarVisibilityContext";
-import axios from "axios";
 
 // Add the GIF array at the top of the component
 const GIFS = [
@@ -103,17 +102,13 @@ export default function Index() {
           // Weather request
           (async () => {
             try {
-              const response = await axios.get('https://api.openweathermap.org/data/2.5/weather', {
-                params: {
-                  lat: latitude,
-                  lon: longitude,
-                  appid: API_KEY,
-                  units: 'metric'
-                }
-              });
-              const description = response.data.weather[0].description;
+              const url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`;
+              const response = await fetch(url);
+              if (!response.ok) throw new Error("Weather fetch failed");
+              const data = await response.json();
+              const description = data.weather[0].description;
               const capitalized = description.charAt(0).toUpperCase() + description.slice(1);
-              return `${capitalized} • ${Math.round(response.data.main.temp)}°C`;
+              return `${capitalized} • ${Math.round(data.main.temp)}°C`;
             } catch {
               return "Weather unavailable";
             }

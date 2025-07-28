@@ -1,7 +1,6 @@
 {
   "expo": {
     "name": "reminis",
-    "jsEngine": "hermes",
     "slug": "skibidi",
     "version": "1.2.0",
     "orientation": "portrait",
@@ -9,9 +8,6 @@
     "scheme": "skibidi",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "ios": {
-      "supportsTablet": true
-    },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/logo.png",
@@ -19,11 +15,6 @@
       },
       "edgeToEdgeEnabled": true,
       "package": "com.akshat.myapp"
-    },
-    "web": {
-      "bundler": "metro",
-      "output": "static",
-      "favicon": "./assets/images/logo.png"
     },
     "plugins": [
       "expo-router",
