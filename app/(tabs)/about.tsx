@@ -27,14 +27,14 @@ export default function AboutUs() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView 
-        style={styles.scrollView} 
+      <ScrollView
+        style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
         {/* Header with Logo */}
         <View style={styles.headerContainer}>
-          <Image 
+          <Image
             source={require('../../assets/images/splash.png')}
             style={styles.logoImage}
             resizeMode="contain"
@@ -45,15 +45,14 @@ export default function AboutUs() {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Our Mission</Text>
           <Text style={styles.description}>
-            Transforming ordinary photos into enriched digital souvenirs by automatically 
-            capturing the context that makes every moment memorable.
+            To create smart, reliable tools that make everyday tasks easier for our people.
           </Text>
         </View>
 
         {/* Contact & Support Section */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Contact & Support</Text>
-          
+
           <View style={styles.contactItem}>
             <View style={styles.contactIcon}>
               <Ionicons name="mail" size={24} color="#4A90E2" />
@@ -107,81 +106,29 @@ export default function AboutUs() {
             </View>
           </View>
         </View>
-
-        {/* Technical Excellence Section */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Technical Excellence</Text>
-          
-          <View style={styles.featureItem}>
-            <View style={styles.featureIcon}>
-              <Ionicons name="shield-checkmark" size={24} color="#4A90E2" />
-            </View>
-            <View style={styles.featureContent}>
-              <Text style={styles.featureTitle}>Privacy-first approach</Text>
-              <Text style={styles.featureDescription}>Your data stays on your device</Text>
-            </View>
-          </View>
-
-          <View style={styles.featureItem}>
-            <View style={styles.featureIcon}>
-              <Ionicons name="speedometer" size={24} color="#4A90E2" />
-            </View>
-            <View style={styles.featureContent}>
-              <Text style={styles.featureTitle}>Lightweight design</Text>
-              <Text style={styles.featureDescription}>Minimal storage footprint</Text>
-            </View>
-          </View>
-
-          <View style={styles.featureItem}>
-            <View style={styles.featureIcon}>
-              <Ionicons name="phone-portrait" size={24} color="#4A90E2" />
-            </View>
-            <View style={styles.featureContent}>
-              <Text style={styles.featureTitle}>Cross-platform compatibility</Text>
-              <Text style={styles.featureDescription}>Works seamlessly everywhere</Text>
-            </View>
-          </View>
-
-          <View style={styles.featureItem}>
-            <View style={styles.featureIcon}>
-              <Ionicons name="cloud-offline" size={24} color="#4A90E2" />
-            </View>
-            <View style={styles.featureContent}>
-              <Text style={styles.featureTitle}>Offline capabilities</Text>
-              <Text style={styles.featureDescription}>Capture memories anywhere</Text>
-            </View>
-          </View>
-        </View>
-
-        {/* What We Do Section */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>What We Do</Text>
-          <Text style={styles.description}>
-            Every photo you capture is automatically enriched with GPS location, 
-            weather data, and precise timestamps to create lasting digital souvenirs 
-            that preserve not just the image, but the complete story of the moment.
-          </Text>
-        </View>
-
         {/* Key Features Section */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Key Features</Text>
-          
+
           <View style={styles.keyFeatureItem}>
-            <Ionicons name="location" size={20} color="#5DADE2" />
+            <Ionicons name="shield-checkmark" size={20} color="#5DADE2" />
+            <Text style={styles.keyFeatureText}>Your Data Stays with You Only</Text>
+          </View>
+          <View style={styles.keyFeatureItem}>
+            <Ionicons name="location-outline" size={20} color="#5DADE2" />
             <Text style={styles.keyFeatureText}>Automatic GPS tagging</Text>
           </View>
-          
+
           <View style={styles.keyFeatureItem}>
             <Ionicons name="partly-sunny" size={20} color="#5DADE2" />
             <Text style={styles.keyFeatureText}>Weather integration</Text>
           </View>
-          
+
           <View style={styles.keyFeatureItem}>
-            <Ionicons name="time" size={20} color="#5DADE2" />
+            <Ionicons name="time-outline" size={20} color="#5DADE2" />
             <Text style={styles.keyFeatureText}>Precise timestamps</Text>
           </View>
-          
+
           <View style={styles.keyFeatureItem}>
             <Ionicons name="search" size={20} color="#5DADE2" />
             <Text style={styles.keyFeatureText}>Smart search & filtering</Text>
@@ -191,10 +138,8 @@ export default function AboutUs() {
         {/* Footer */}
         <View style={styles.footer}>
           <Text style={styles.footerText}>
-            Made with ❤️ for memory keepers
+            Made with ❤️ by Agile.Tech
           </Text>
-          <Text style={styles.versionText}>Version 1.0.0</Text>
-          <Text style={styles.companyName}>Made by Agile Tech</Text>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -215,9 +160,7 @@ const styles = StyleSheet.create({
   headerContainer: {
     alignItems: "center",
     backgroundColor: "white",
-    paddingTop: 40,
-    paddingBottom: 30,
-    paddingHorizontal: 20,
+    padding: 10,
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
     shadowColor: "#000",
@@ -228,23 +171,8 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   logoImage: {
-    width: 180,
-    height: 180,
-    marginBottom: 16,
-  },
-  appName: {
-    fontSize: 32,
-    fontWeight: "700",
-    color: "#2C3E50",
-    marginBottom: 8,
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
-  },
-  tagline: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#4A90E2",
-    fontStyle: "italic",
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
+    width: 350,
+    height: 180
   },
   section: {
     marginHorizontal: 20,
@@ -269,36 +197,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#2C3E50",
     lineHeight: 24,
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
-  },
-  featureItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 16,
-    paddingVertical: 8,
-  },
-  featureIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: "rgba(74, 144, 226, 0.1)",
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: 16,
-  },
-  featureContent: {
-    flex: 1,
-  },
-  featureTitle: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#2C3E50",
-    marginBottom: 4,
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
-  },
-  featureDescription: {
-    fontSize: 14,
-    color: "#2C3E50",
     fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
   },
   keyFeatureItem: {
@@ -326,21 +224,6 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
   },
-  versionText: {
-    fontSize: 14,
-    color: "#4A90E2",
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
-  },
-  companyName: {
-    fontSize: 18,
-    color: "#2C3E50",
-    fontWeight: "700",
-    fontStyle: "italic",
-    marginTop: 12,
-    letterSpacing: 0.5,
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
-  },
-  
   // Contact & Support Styles
   contactItem: {
     flexDirection: "row",
@@ -378,7 +261,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
   },
-  
+
   // Social Media Styles
   socialSection: {
     marginTop: 20,
@@ -408,9 +291,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginHorizontal: 12,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 0 }
   },
 });

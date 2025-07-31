@@ -2,7 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 export default function TabLayout() {
   return (
-    <Tabs screenOptions={{ tabBarActiveTintColor: "#FF3B30" }}>
+    <Tabs screenOptions={{ tabBarActiveTintColor: "#4300FF" }}>
       <Tabs.Screen
         name="index"
         options={{
@@ -46,7 +46,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="donate"
+        name="about"
         options={{
           title: "About",
           headerShown: false,

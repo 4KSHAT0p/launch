@@ -288,7 +288,7 @@ const Gallery = () => {
 
   const handleBulkDelete = () => {
     Alert.alert(
-      "🗑️ Delete Photos",
+      "Delete Photos",
       `Are you sure you want to delete ${selectedIds.length} photo${selectedIds.length > 1 ? "s" : ""}?`,
       [
         { text: "Cancel", style: "cancel" },
@@ -321,7 +321,7 @@ const Gallery = () => {
       const photoDate = new Date(photo.timestamp);
       return photoDate.getMonth() === now.getMonth() && photoDate.getFullYear() === now.getFullYear();
     }).length;
-    
+
     const thisYear = photos.filter(photo => {
       const photoDate = new Date(photo.timestamp);
       return photoDate.getFullYear() === now.getFullYear();
@@ -335,7 +335,7 @@ const Gallery = () => {
 
     // Apply text search
     if (searchQuery.trim()) {
-      filtered = filtered.filter(photo => 
+      filtered = filtered.filter(photo =>
         photo.address?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         photo.weather?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         new Date(photo.timestamp).toLocaleDateString().includes(searchQuery)
@@ -362,7 +362,7 @@ const Gallery = () => {
   const sortPhotos = (photos: PhotoData[]) => {
     return [...photos].sort((a, b) => {
       let comparison = 0;
-      
+
       switch (sortBy) {
         case 'date':
           comparison = new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
@@ -374,7 +374,7 @@ const Gallery = () => {
           comparison = (a.weather || '').localeCompare(b.weather || '');
           break;
       }
-      
+
       return sortOrder === 'asc' ? comparison : -comparison;
     });
   };
@@ -391,7 +391,7 @@ const Gallery = () => {
       // Find the shortest column
       const shortestColumnIndex = columnHeights.indexOf(Math.min(...columnHeights));
       columns[shortestColumnIndex].push(photo);
-      
+
       // Estimate height for layout (will be corrected by individual cards)
       columnHeights[shortestColumnIndex] += 200; // Average estimated height
     });
@@ -473,7 +473,7 @@ const Gallery = () => {
             {/* Main Header Row */}
             <View style={styles.headerMainRow}>
               <View style={styles.headerTitleSection}>
-                <Text style={styles.title}>Your Memories 📸</Text>
+                <Text style={styles.title}>Your Memories</Text>
                 <View style={styles.photoBreakdownContainer}>
                   <View style={styles.photoBreakdownRow}>
                     <View style={styles.breakdownItem}>
@@ -491,8 +491,8 @@ const Gallery = () => {
                       <Text style={styles.breakdownLabel}>This Year</Text>
                     </View>
                   </View>
-                  
-                  <TouchableOpacity 
+
+                  <TouchableOpacity
                     style={styles.searchToggle}
                     onPress={() => setShowSearchBar(!showSearchBar)}
                   >
@@ -528,7 +528,7 @@ const Gallery = () => {
             <View style={styles.controlsSection}>
               <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.controlsScrollView}>
                 {/* Date Filter Pills */}
-                <TouchableOpacity 
+                <TouchableOpacity
                   style={[styles.filterPill, filterBy === 'all' && styles.filterPillActive]}
                   onPress={() => setFilterBy('all')}
                 >
@@ -536,8 +536,8 @@ const Gallery = () => {
                     All
                   </Text>
                 </TouchableOpacity>
-                
-                <TouchableOpacity 
+
+                <TouchableOpacity
                   style={[styles.filterPill, filterBy === 'thisMonth' && styles.filterPillActive]}
                   onPress={() => setFilterBy('thisMonth')}
                 >
@@ -546,7 +546,7 @@ const Gallery = () => {
                   </Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity 
+                <TouchableOpacity
                   style={[styles.filterPill, filterBy === 'thisYear' && styles.filterPillActive]}
                   onPress={() => setFilterBy('thisYear')}
                 >
@@ -557,7 +557,7 @@ const Gallery = () => {
 
                 <View style={styles.sortControlsContainer}>
                   {/* Sort By */}
-                  <TouchableOpacity 
+                  <TouchableOpacity
                     style={[styles.sortPill, sortBy === 'date' && styles.sortPillActive]}
                     onPress={() => setSortBy('date')}
                   >
@@ -565,7 +565,7 @@ const Gallery = () => {
                     <Text style={[styles.sortPillText, sortBy === 'date' && styles.sortPillTextActive]}>Date</Text>
                   </TouchableOpacity>
 
-                  <TouchableOpacity 
+                  <TouchableOpacity
                     style={[styles.sortPill, sortBy === 'location' && styles.sortPillActive]}
                     onPress={() => setSortBy('location')}
                   >
@@ -573,7 +573,7 @@ const Gallery = () => {
                     <Text style={[styles.sortPillText, sortBy === 'location' && styles.sortPillTextActive]}>Location</Text>
                   </TouchableOpacity>
 
-                  <TouchableOpacity 
+                  <TouchableOpacity
                     style={[styles.sortPill, sortBy === 'weather' && styles.sortPillActive]}
                     onPress={() => setSortBy('weather')}
                   >
@@ -582,14 +582,14 @@ const Gallery = () => {
                   </TouchableOpacity>
 
                   {/* Sort Order Toggle */}
-                  <TouchableOpacity 
+                  <TouchableOpacity
                     style={styles.sortOrderButton}
                     onPress={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
                   >
-                    <Ionicons 
-                      name={sortOrder === 'asc' ? 'arrow-up' : 'arrow-down'} 
-                      size={16} 
-                      color="rgba(255,255,255,0.8)" 
+                    <Ionicons
+                      name={sortOrder === 'asc' ? 'arrow-up' : 'arrow-down'}
+                      size={16}
+                      color="rgba(255,255,255,0.8)"
                     />
                   </TouchableOpacity>
                 </View>
@@ -610,12 +610,12 @@ const Gallery = () => {
       </View>
 
       <View style={styles.scrollContent}>
-        <ScrollView 
+        <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollContainer}
         >
           <View style={styles.masonryContainer}>
-            {masonryColumns.map((columnPhotos, columnIndex) => 
+            {masonryColumns.map((columnPhotos, columnIndex) =>
               renderMasonryColumn(columnPhotos, columnIndex)
             )}
           </View>
@@ -735,13 +735,11 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: "700",
     color: "white",
-    marginBottom: 4,
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
+    marginBottom: 4
   },
   subtitle: {
     fontSize: 16,
     color: "rgba(255,255,255,0.8)",
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
     fontWeight: "500",
   },
   scrollContent: {
@@ -809,8 +807,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "600",
     marginLeft: 6,
-    flex: 1,
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
+    flex: 1
   },
   selectedTick: {
     position: "absolute",
@@ -848,8 +845,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: "700",
     color: "white",
-    marginBottom: 8,
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
+    marginBottom: 8
   },
   emptySubText: {
     fontSize: 16,
@@ -857,22 +853,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 32,
     lineHeight: 22,
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
     fontWeight: "500",
-  },
-  emptyButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'white',
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    borderRadius: 25,
-  },
-  emptyButtonText: {
-    color: '#4A90E2',
-    fontWeight: '700',
-    marginLeft: 8,
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
   },
   modalContainer: {
     flex: 1,
@@ -901,8 +882,7 @@ const styles = StyleSheet.create({
   photoCounter: {
     color: "white",
     fontSize: 16,
-    fontWeight: "700",
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
+    fontWeight: "700"
   },
   shareButton: {
     width: 44,
@@ -935,7 +915,6 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: "white",
     marginBottom: 12,
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
   },
   infoRow: {
     flexDirection: 'row',
@@ -950,7 +929,6 @@ const styles = StyleSheet.create({
     color: "white",
     marginLeft: 10,
     flex: 1,
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
     fontWeight: "500",
   },
   actionButtonContainer: {
@@ -975,14 +953,6 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     marginLeft: 8,
     fontSize: 16,
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
-  },
-  spacer: {
-    flex: 1,
-  },
-  photoRow: {
-    flexDirection: 'row',
-    marginBottom: 12,
   },
   // Enhanced Header Styles
   headerMainRow: {
@@ -1017,13 +987,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '700',
     color: '#F39C12',
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
   },
   breakdownLabel: {
     fontSize: 12,
     color: 'rgba(255,255,255,0.8)',
     marginTop: 2,
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
     fontWeight: '500',
   },
   breakdownDivider: {
@@ -1054,7 +1022,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     marginLeft: 8,
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
   },
   controlsSection: {
     marginTop: 12,
@@ -1070,16 +1037,18 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   filterPillActive: {
-    backgroundColor: '#4A90E2',
+    backgroundColor: 'white', // Changed from #4A90E2 for better contrast
+    borderWidth: 1,
+    borderColor: '#4A90E2',
   },
   filterPillText: {
     color: 'rgba(255,255,255,0.8)',
     fontSize: 14,
-    fontWeight: '600',
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
+    fontWeight: '600'
   },
   filterPillTextActive: {
-    color: 'white',
+    color: '#4A90E2', // Text is blue on white background
+    fontWeight: '700',
   },
   sortControlsContainer: {
     flexDirection: 'row',
@@ -1099,7 +1068,7 @@ const styles = StyleSheet.create({
     marginRight: 6,
   },
   sortPillActive: {
-    backgroundColor: 'rgba(74, 144, 226, 0.3)',
+    backgroundColor: 'white', // Changed from rgba(74, 144, 226, 0.3)
     borderWidth: 1,
     borderColor: '#4A90E2',
   },
@@ -1107,11 +1076,11 @@ const styles = StyleSheet.create({
     color: 'rgba(255,255,255,0.8)',
     fontSize: 12,
     fontWeight: '600',
-    marginLeft: 4,
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
+    marginLeft: 4
   },
   sortPillTextActive: {
-    color: '#4A90E2',
+    color: '#4A90E2', // Text is blue on white background
+    fontWeight: '700',
   },
   sortOrderButton: {
     backgroundColor: 'rgba(255,255,255,0.1)',
@@ -1123,17 +1092,16 @@ const styles = StyleSheet.create({
     marginTop: 12,
     paddingHorizontal: 16,
     paddingVertical: 8,
-    backgroundColor: 'rgba(93, 173, 226, 0.2)',
+    backgroundColor: 'white', // Changed for better contrast
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: 'rgba(93, 173, 226, 0.3)',
+    borderColor: '#4A90E2', // Strong blue border
   },
   resultsText: {
-    color: '#5DADE2',
+    color: '#4A90E2', // Strong blue text
     fontSize: 14,
-    fontWeight: '600',
-    textAlign: 'center',
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
+    fontWeight: '700',
+    textAlign: 'center'
   },
 });
 

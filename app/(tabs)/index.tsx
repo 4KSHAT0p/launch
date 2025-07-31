@@ -404,23 +404,6 @@ export default function Index() {
 
 const styles = StyleSheet.create({
   // Existing styles
-  fab: {
-    position: "absolute",
-    bottom: 32,
-    right: 32,
-    backgroundColor: "#007AFF",
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    justifyContent: "center",
-    alignItems: "center",
-    zIndex: 10,
-    elevation: 6,
-    shadowColor: "#000",
-    shadowOpacity: 0.3,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 5,
-  },
   container: {
     flex: 1,
     justifyContent: "center",
@@ -428,10 +411,6 @@ const styles = StyleSheet.create({
   message: {
     textAlign: "center",
     paddingBottom: 10,
-  },
-  camera: {
-    flex: 1,
-    backgroundColor: "black",
   },
   buttonContainer: {
     position: "absolute",
@@ -448,24 +427,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 12,
     minWidth: 60,
     justifyContent: "center",
-  },
-  text: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "white",
-  },
-  headerImageContainer: {
-    width: "100%",
-    height: 200,
-    justifyContent: "center",
-    marginTop: 25,
-    alignItems: "center",
-    backgroundColor: "white",
-    paddingVertical: 10,
-  },
-  headerImage: {
-    width: "100%",
-    height: "100%",
   },
   locationOverlay: {
     position: "absolute",
@@ -588,15 +549,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 20,
   },
-  appTitle: {
-    fontSize: 36,
-    fontWeight: "bold",
-    color: "#2C3E50",
-    marginBottom: 4,
-  },
   logoImage: {
     width: 400,
-    height: 200,
+    height: 100,
   },
   appFullForm: {
     fontSize: 18,
@@ -604,57 +559,26 @@ const styles = StyleSheet.create({
     color: "#2C3E50",
     marginBottom: 8,
     letterSpacing: 1,
-    fontStyle: "italic",
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
-  },
-  appSlogan: {
-    fontSize: 16,
-    color: "#2C3E50",
-    textAlign: "center",
-    marginBottom: 8,
+    fontStyle: "italic"
   },
   photoCount: {
     fontSize: 18,
     color: "#5DADE2",
-    fontWeight: "700",
-    fontFamily: Platform.OS === 'ios' ? 'Avenir-Heavy' : 'sans-serif-medium',
+    fontWeight: "700"
   },
   contentSection: {
     padding: 24,
     alignItems: "center",
   },
   welcomeText: {
-    fontSize: 15,
+    fontSize: 16,
     color: "#2C3E50",
     textAlign: "center",
     lineHeight: 22,
     marginBottom: 32,
     paddingHorizontal: 10,
-    fontWeight: "700",
-    fontFamily: Platform.OS === 'ios' ? 'Avenir-Heavy' : 'sans-serif-medium',
+    fontWeight: "normal"
   },
-  getStartedButton: {
-    backgroundColor: "#4A90E2",
-    borderRadius: 25,
-    paddingVertical: 16,
-    paddingHorizontal: 32,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 24,
-    shadowColor: "#4A90E2",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 6,
-  },
-  getStartedButtonText: {
-    color: "white",
-    fontSize: 18,
-    fontWeight: "600",
-    marginRight: 8,
-  },
-  
   // Camera Action Bar Styles
   cameraActionBar: {
     position: "absolute",
@@ -676,14 +600,13 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   cameraActionBarPressed: {
-    backgroundColor: "#F39C12",
-    shadowColor: "#F39C12",
+    backgroundColor: "#4300FF",
+    shadowColor: "#4300FF",
   },
   cameraActionText: {
     color: "white",
     fontSize: 18,
     fontWeight: "600",
-    marginLeft: 12,
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
+    marginLeft: 12
   },
 });
