@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import MarkerView from "../../components/maplibre";
 import { usePhotoContext } from "../context/PhotoContext";
 
@@ -32,6 +32,7 @@ export default function Map() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#EBF3FD",
   },
   noPhotosContainer: {
     flex: 1,
@@ -44,10 +45,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
     textAlign: 'center',
+    color: "#2C3E50",
   },
   noPhotosSubtext: {
     fontSize: 14,
-    color: '#666',
+    color: '#2C3E50',
     textAlign: 'center',
   },
 });

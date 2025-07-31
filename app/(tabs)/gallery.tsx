@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import { BlurView } from 'expo-blur';
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import * as Sharing from 'expo-sharing';
 import { StatusBar } from "expo-status-bar";
@@ -103,7 +102,7 @@ const AnimatedPhotoCard = ({ photo, onPress, onLongPress, isSelected, actionMode
             width: CARD_WIDTH,
             height: imageHeight,
             borderWidth: isSelected ? 3 : 0,
-            borderColor: isSelected ? "#34C759" : "transparent",
+            borderColor: isSelected ? "#5DADE2" : "transparent",
             opacity: actionMode && !isSelected ? 0.5 : 1,
           }
         ]}
@@ -125,7 +124,7 @@ const AnimatedPhotoCard = ({ photo, onPress, onLongPress, isSelected, actionMode
           )}
           {actionMode && isSelected && (
             <View style={styles.selectedTick}>
-              <Ionicons name="checkmark-circle" size={24} color="#34C759" />
+              <Ionicons name="checkmark-circle" size={24} color="#5DADE2" />
             </View>
           )}
         </View>
@@ -562,7 +561,7 @@ const Gallery = () => {
                     style={[styles.sortPill, sortBy === 'date' && styles.sortPillActive]}
                     onPress={() => setSortBy('date')}
                   >
-                    <Ionicons name="calendar" size={14} color={sortBy === 'date' ? '#667eea' : 'rgba(255,255,255,0.8)'} />
+                    <Ionicons name="calendar" size={14} color={sortBy === 'date' ? '#4A90E2' : 'rgba(255,255,255,0.8)'} />
                     <Text style={[styles.sortPillText, sortBy === 'date' && styles.sortPillTextActive]}>Date</Text>
                   </TouchableOpacity>
 
@@ -570,7 +569,7 @@ const Gallery = () => {
                     style={[styles.sortPill, sortBy === 'location' && styles.sortPillActive]}
                     onPress={() => setSortBy('location')}
                   >
-                    <Ionicons name="location" size={14} color={sortBy === 'location' ? '#667eea' : 'rgba(255,255,255,0.8)'} />
+                    <Ionicons name="location" size={14} color={sortBy === 'location' ? '#4A90E2' : 'rgba(255,255,255,0.8)'} />
                     <Text style={[styles.sortPillText, sortBy === 'location' && styles.sortPillTextActive]}>Location</Text>
                   </TouchableOpacity>
 
@@ -578,7 +577,7 @@ const Gallery = () => {
                     style={[styles.sortPill, sortBy === 'weather' && styles.sortPillActive]}
                     onPress={() => setSortBy('weather')}
                   >
-                    <Ionicons name="partly-sunny" size={14} color={sortBy === 'weather' ? '#667eea' : 'rgba(255,255,255,0.8)'} />
+                    <Ionicons name="partly-sunny" size={14} color={sortBy === 'weather' ? '#4A90E2' : 'rgba(255,255,255,0.8)'} />
                     <Text style={[styles.sortPillText, sortBy === 'weather' && styles.sortPillTextActive]}>Weather</Text>
                   </TouchableOpacity>
 
@@ -683,14 +682,14 @@ const Gallery = () => {
 
                 {currentPhoto.address && (
                   <View style={styles.infoRow}>
-                    <Ionicons name="location" size={18} color="#667eea" />
+                    <Ionicons name="location" size={18} color="#F39C12" />
                     <Text style={styles.infoText} numberOfLines={1}>{currentPhoto.address}</Text>
                   </View>
                 )}
 
                 {currentPhoto.weather && (
                   <View style={styles.infoRow}>
-                    <Ionicons name="partly-sunny" size={18} color="#667eea" />
+                    <Ionicons name="partly-sunny" size={18} color="#F39C12" />
                     <Text style={styles.infoText} numberOfLines={1}>{currentPhoto.weather}</Text>
                   </View>
                 )}
@@ -722,13 +721,13 @@ const Gallery = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f8f9fa"
+    backgroundColor: "#EBF3FD"
   },
   header: {
     paddingTop: 40,
     paddingBottom: 20,
     paddingHorizontal: 16,
-    backgroundColor: '#34C759',
+    backgroundColor: '#4A90E2',
     borderBottomLeftRadius: 25,
     borderBottomRightRadius: 25,
   },
@@ -830,7 +829,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: '#667eea',
+    backgroundColor: '#4A90E2',
   },
   emptyContent: {
     alignItems: "center",
@@ -870,7 +869,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
   },
   emptyButtonText: {
-    color: '#667eea',
+    color: '#4A90E2',
     fontWeight: '700',
     marginLeft: 8,
     fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
@@ -968,7 +967,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     borderRadius: 25,
     justifyContent: "center",
-    backgroundColor: "#667eea",
+    backgroundColor: "#4A90E2",
     width: "80%",
   },
   actionButtonText: {
@@ -1017,7 +1016,7 @@ const styles = StyleSheet.create({
   breakdownNumber: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#667eea',
+    color: '#F39C12',
     fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
   },
   breakdownLabel: {
@@ -1071,7 +1070,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   filterPillActive: {
-    backgroundColor: '#667eea',
+    backgroundColor: '#4A90E2',
   },
   filterPillText: {
     color: 'rgba(255,255,255,0.8)',
@@ -1100,9 +1099,9 @@ const styles = StyleSheet.create({
     marginRight: 6,
   },
   sortPillActive: {
-    backgroundColor: 'rgba(102, 126, 234, 0.3)',
+    backgroundColor: 'rgba(74, 144, 226, 0.3)',
     borderWidth: 1,
-    borderColor: '#667eea',
+    borderColor: '#4A90E2',
   },
   sortPillText: {
     color: 'rgba(255,255,255,0.8)',
@@ -1112,7 +1111,7 @@ const styles = StyleSheet.create({
     fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
   },
   sortPillTextActive: {
-    color: '#667eea',
+    color: '#4A90E2',
   },
   sortOrderButton: {
     backgroundColor: 'rgba(255,255,255,0.1)',
@@ -1124,13 +1123,13 @@ const styles = StyleSheet.create({
     marginTop: 12,
     paddingHorizontal: 16,
     paddingVertical: 8,
-    backgroundColor: 'rgba(52, 199, 89, 0.2)',
+    backgroundColor: 'rgba(93, 173, 226, 0.2)',
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: 'rgba(52, 199, 89, 0.3)',
+    borderColor: 'rgba(93, 173, 226, 0.3)',
   },
   resultsText: {
-    color: '#34C759',
+    color: '#5DADE2',
     fontSize: 14,
     fontWeight: '600',
     textAlign: 'center',

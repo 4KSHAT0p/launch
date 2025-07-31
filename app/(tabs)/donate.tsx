@@ -2,15 +2,29 @@ import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import {
   Image,
+  Linking,
   Platform,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View
 } from "react-native";
 
 export default function AboutUs() {
+  const openInstagram = () => {
+    Linking.openURL('https://www.instagram.com/4gile.tech/');
+  };
+
+  const openTwitter = () => {
+    Linking.openURL('https://x.com/4gileTech');
+  };
+
+  const openGmail = () => {
+    Linking.openURL('mailto:agile.tech.64@gmail.com');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView 
@@ -42,7 +56,7 @@ export default function AboutUs() {
           
           <View style={styles.contactItem}>
             <View style={styles.contactIcon}>
-              <Ionicons name="mail" size={24} color="#667eea" />
+              <Ionicons name="mail" size={24} color="#4A90E2" />
             </View>
             <View style={styles.contactContent}>
               <Text style={styles.contactTitle}>Support Email</Text>
@@ -55,7 +69,7 @@ export default function AboutUs() {
 
           <View style={styles.contactItem}>
             <View style={styles.contactIcon}>
-              <Ionicons name="bulb" size={24} color="#667eea" />
+              <Ionicons name="bulb" size={24} color="#4A90E2" />
             </View>
             <View style={styles.contactContent}>
               <Text style={styles.contactTitle}>Feature Requests</Text>
@@ -67,7 +81,7 @@ export default function AboutUs() {
 
           <View style={styles.contactItem}>
             <View style={styles.contactIcon}>
-              <Ionicons name="bug" size={24} color="#667eea" />
+              <Ionicons name="bug" size={24} color="#4A90E2" />
             </View>
             <View style={styles.contactContent}>
               <Text style={styles.contactTitle}>Bug Reports</Text>
@@ -81,15 +95,15 @@ export default function AboutUs() {
           <View style={styles.socialSection}>
             <Text style={styles.socialTitle}>Follow Us</Text>
             <View style={styles.socialLinks}>
-              <View style={styles.socialIcon}>
+              <TouchableOpacity style={styles.socialIcon} onPress={openInstagram}>
                 <Ionicons name="logo-instagram" size={28} color="#E4405F" />
-              </View>
-              <View style={styles.socialIcon}>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.socialIcon} onPress={openTwitter}>
                 <Ionicons name="logo-twitter" size={28} color="#1DA1F2" />
-              </View>
-              <View style={styles.socialIcon}>
-                <Ionicons name="logo-github" size={28} color="#333" />
-              </View>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.socialIcon} onPress={openGmail}>
+                <Ionicons name="mail" size={28} color="#EA4335" />
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -100,7 +114,7 @@ export default function AboutUs() {
           
           <View style={styles.featureItem}>
             <View style={styles.featureIcon}>
-              <Ionicons name="shield-checkmark" size={24} color="#667eea" />
+              <Ionicons name="shield-checkmark" size={24} color="#4A90E2" />
             </View>
             <View style={styles.featureContent}>
               <Text style={styles.featureTitle}>Privacy-first approach</Text>
@@ -110,7 +124,7 @@ export default function AboutUs() {
 
           <View style={styles.featureItem}>
             <View style={styles.featureIcon}>
-              <Ionicons name="speedometer" size={24} color="#667eea" />
+              <Ionicons name="speedometer" size={24} color="#4A90E2" />
             </View>
             <View style={styles.featureContent}>
               <Text style={styles.featureTitle}>Lightweight design</Text>
@@ -120,7 +134,7 @@ export default function AboutUs() {
 
           <View style={styles.featureItem}>
             <View style={styles.featureIcon}>
-              <Ionicons name="phone-portrait" size={24} color="#667eea" />
+              <Ionicons name="phone-portrait" size={24} color="#4A90E2" />
             </View>
             <View style={styles.featureContent}>
               <Text style={styles.featureTitle}>Cross-platform compatibility</Text>
@@ -130,7 +144,7 @@ export default function AboutUs() {
 
           <View style={styles.featureItem}>
             <View style={styles.featureIcon}>
-              <Ionicons name="cloud-offline" size={24} color="#667eea" />
+              <Ionicons name="cloud-offline" size={24} color="#4A90E2" />
             </View>
             <View style={styles.featureContent}>
               <Text style={styles.featureTitle}>Offline capabilities</Text>
@@ -154,22 +168,22 @@ export default function AboutUs() {
           <Text style={styles.sectionTitle}>Key Features</Text>
           
           <View style={styles.keyFeatureItem}>
-            <Ionicons name="location" size={20} color="#34C759" />
+            <Ionicons name="location" size={20} color="#5DADE2" />
             <Text style={styles.keyFeatureText}>Automatic GPS tagging</Text>
           </View>
           
           <View style={styles.keyFeatureItem}>
-            <Ionicons name="partly-sunny" size={20} color="#34C759" />
+            <Ionicons name="partly-sunny" size={20} color="#5DADE2" />
             <Text style={styles.keyFeatureText}>Weather integration</Text>
           </View>
           
           <View style={styles.keyFeatureItem}>
-            <Ionicons name="time" size={20} color="#34C759" />
+            <Ionicons name="time" size={20} color="#5DADE2" />
             <Text style={styles.keyFeatureText}>Precise timestamps</Text>
           </View>
           
           <View style={styles.keyFeatureItem}>
-            <Ionicons name="search" size={20} color="#34C759" />
+            <Ionicons name="search" size={20} color="#5DADE2" />
             <Text style={styles.keyFeatureText}>Smart search & filtering</Text>
           </View>
         </View>
@@ -180,6 +194,7 @@ export default function AboutUs() {
             Made with ❤️ for memory keepers
           </Text>
           <Text style={styles.versionText}>Version 1.0.0</Text>
+          <Text style={styles.companyName}>Made by Agile Tech</Text>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -189,7 +204,7 @@ export default function AboutUs() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f8f9fa",
+    backgroundColor: "#EBF3FD",
   },
   scrollView: {
     flex: 1,
@@ -220,14 +235,14 @@ const styles = StyleSheet.create({
   appName: {
     fontSize: 32,
     fontWeight: "700",
-    color: "#333",
+    color: "#2C3E50",
     marginBottom: 8,
     fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
   },
   tagline: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#667eea",
+    color: "#4A90E2",
     fontStyle: "italic",
     fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
   },
@@ -246,13 +261,13 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 22,
     fontWeight: "700",
-    color: "#333",
+    color: "#2C3E50",
     marginBottom: 16,
     fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
   },
   description: {
     fontSize: 16,
-    color: "#666",
+    color: "#2C3E50",
     lineHeight: 24,
     fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
   },
@@ -266,7 +281,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: "rgba(102, 126, 234, 0.1)",
+    backgroundColor: "rgba(74, 144, 226, 0.1)",
     justifyContent: "center",
     alignItems: "center",
     marginRight: 16,
@@ -277,13 +292,13 @@ const styles = StyleSheet.create({
   featureTitle: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#333",
+    color: "#2C3E50",
     marginBottom: 4,
     fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
   },
   featureDescription: {
     fontSize: 14,
-    color: "#666",
+    color: "#2C3E50",
     fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
   },
   keyFeatureItem: {
@@ -294,7 +309,7 @@ const styles = StyleSheet.create({
   },
   keyFeatureText: {
     fontSize: 16,
-    color: "#333",
+    color: "#2C3E50",
     marginLeft: 12,
     fontWeight: "500",
     fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
@@ -306,14 +321,23 @@ const styles = StyleSheet.create({
   },
   footerText: {
     fontSize: 16,
-    color: "#666",
+    color: "#2C3E50",
     fontWeight: "500",
     marginBottom: 8,
     fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
   },
   versionText: {
     fontSize: 14,
-    color: "#999",
+    color: "#4A90E2",
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
+  },
+  companyName: {
+    fontSize: 18,
+    color: "#2C3E50",
+    fontWeight: "700",
+    fontStyle: "italic",
+    marginTop: 12,
+    letterSpacing: 0.5,
     fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
   },
   
@@ -328,7 +352,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: "rgba(102, 126, 234, 0.1)",
+    backgroundColor: "rgba(74, 144, 226, 0.1)",
     justifyContent: "center",
     alignItems: "center",
     marginRight: 16,
@@ -339,18 +363,18 @@ const styles = StyleSheet.create({
   contactTitle: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#333",
+    color: "#2C3E50",
     marginBottom: 4,
     fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
   },
   contactDescription: {
     fontSize: 14,
-    color: "#666",
+    color: "#2C3E50",
     fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
   },
   emailText: {
     fontSize: 14,
-    color: "#34C759",
+    color: "#5DADE2",
     fontWeight: "700",
     fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
   },
@@ -360,12 +384,12 @@ const styles = StyleSheet.create({
     marginTop: 20,
     paddingTop: 20,
     borderTopWidth: 1,
-    borderTopColor: "rgba(0,0,0,0.1)",
+    borderTopColor: "rgba(74, 144, 226, 0.2)",
   },
   socialTitle: {
     fontSize: 18,
     fontWeight: "600",
-    color: "#333",
+    color: "#2C3E50",
     marginBottom: 16,
     textAlign: "center",
     fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
@@ -379,7 +403,7 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: "rgba(0,0,0,0.05)",
+    backgroundColor: "rgba(74, 144, 226, 0.1)",
     justifyContent: "center",
     alignItems: "center",
     marginHorizontal: 12,

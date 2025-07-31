@@ -537,10 +537,10 @@ const styles = StyleSheet.create({
     width: "45%",
   },
   saveButton: {
-    backgroundColor: "#007AFF",
+    backgroundColor: "#4A90E2",
   },
   viewButton: {
-    backgroundColor: "#34C759",
+    backgroundColor: "#5DADE2",
   },
   actionButtonText: {
     color: "white",
@@ -552,7 +552,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   newPhotoText: {
-    color: "#007AFF",
+    color: "#4A90E2",
     fontSize: 16,
     fontWeight: "600",
   },
@@ -560,7 +560,7 @@ const styles = StyleSheet.create({
   // New Home Screen Styles
   homeScrollView: {
     flex: 1,
-    backgroundColor: "#f8f9fa",
+    backgroundColor: "#EBF3FD",
   },
   homeScrollContent: {
     paddingBottom: 100,
@@ -591,7 +591,7 @@ const styles = StyleSheet.create({
   appTitle: {
     fontSize: 36,
     fontWeight: "bold",
-    color: "#333",
+    color: "#2C3E50",
     marginBottom: 4,
   },
   logoImage: {
@@ -601,7 +601,7 @@ const styles = StyleSheet.create({
   appFullForm: {
     fontSize: 18,
     fontWeight: "700",
-    color: "#000",
+    color: "#2C3E50",
     marginBottom: 8,
     letterSpacing: 1,
     fontStyle: "italic",
@@ -609,13 +609,13 @@ const styles = StyleSheet.create({
   },
   appSlogan: {
     fontSize: 16,
-    color: "#666",
+    color: "#2C3E50",
     textAlign: "center",
     marginBottom: 8,
   },
   photoCount: {
     fontSize: 18,
-    color: "#34C759",
+    color: "#5DADE2",
     fontWeight: "700",
     fontFamily: Platform.OS === 'ios' ? 'Avenir-Heavy' : 'sans-serif-medium',
   },
@@ -625,7 +625,7 @@ const styles = StyleSheet.create({
   },
   welcomeText: {
     fontSize: 15,
-    color: "#000",
+    color: "#2C3E50",
     textAlign: "center",
     lineHeight: 22,
     marginBottom: 32,
@@ -634,7 +634,7 @@ const styles = StyleSheet.create({
     fontFamily: Platform.OS === 'ios' ? 'Avenir-Heavy' : 'sans-serif-medium',
   },
   getStartedButton: {
-    backgroundColor: "#007AFF",
+    backgroundColor: "#4A90E2",
     borderRadius: 25,
     paddingVertical: 16,
     paddingHorizontal: 32,
@@ -642,7 +642,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 24,
-    shadowColor: "#007AFF",
+    shadowColor: "#4A90E2",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
@@ -661,14 +661,14 @@ const styles = StyleSheet.create({
     bottom: 32,
     left: 16,
     right: 16,
-    backgroundColor: "#667eea",
+    backgroundColor: "#4A90E2",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     paddingVertical: 16,
     paddingHorizontal: 20,
     borderRadius: 12,
-    shadowColor: "#667eea",
+    shadowColor: "#4A90E2",
     shadowOpacity: 0.4,
     shadowOffset: { width: 0, height: 4 },
     shadowRadius: 12,
@@ -676,8 +676,8 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   cameraActionBarPressed: {
-    backgroundColor: "#007AFF",
-    shadowColor: "#007AFF",
+    backgroundColor: "#F39C12",
+    shadowColor: "#F39C12",
   },
   cameraActionText: {
     color: "white",
