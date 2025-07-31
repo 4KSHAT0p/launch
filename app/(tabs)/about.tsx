@@ -125,11 +125,6 @@ export default function AboutUs() {
           </View>
 
           <View style={styles.keyFeatureItem}>
-            <Ionicons name="time-outline" size={20} color="#5DADE2" />
-            <Text style={styles.keyFeatureText}>Precise timestamps</Text>
-          </View>
-
-          <View style={styles.keyFeatureItem}>
             <Ionicons name="search" size={20} color="#5DADE2" />
             <Text style={styles.keyFeatureText}>Smart search & filtering</Text>
           </View>

@@ -250,12 +250,12 @@ const Gallery = () => {
     try {
       const success = await saveToGallery(photoId);
       if (success) {
-        Alert.alert("✅ Success", "Photo saved to device gallery");
+        Alert.alert("Success", "Photo saved to device gallery");
       } else {
-        Alert.alert("❌ Error", "Failed to save photo to device gallery");
+        Alert.alert("Error", "Failed to save photo to device gallery");
       }
     } catch (e) {
-      Alert.alert("❌ Error", "Failed to save photo");
+      Alert.alert("Error", "Failed to save photo");
     } finally {
       setLoading(false);
     }
@@ -632,12 +632,12 @@ const Gallery = () => {
           <ViewShot
             ref={viewShotRef}
             options={{
-              fileName: "memory_screenshot",
+              fileName: "share_memory",
               format: "jpg",
               quality: 0.9,
               result: 'tmpfile'
             }}
-            style={styles.modalContainer}
+            style={[styles.modalContainer, { flex: 1 }]} // Ensure modal container fills screen
           >
             <View style={styles.modalHeader}>
               <TouchableOpacity
@@ -659,21 +659,26 @@ const Gallery = () => {
               </TouchableOpacity>
             </View>
 
-            {/* DIRECT SWIPE ON IMAGE */}
+            {/* Responsive image container */}
             <View
-              style={styles.imageContainer}
+              style={[styles.imageContainer, { flex: 2, minHeight: 200, maxHeight: '65%' }]}
               onTouchStart={handleTouchStart}
               onTouchEnd={handleTouchEnd}
             >
               <Image
                 source={{ uri: currentPhoto.uri }}
-                style={styles.fullImage}
-                resizeMode="contain"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  maxWidth: Dimensions.get('window').width,
+                  maxHeight: Dimensions.get('window').height * 0.65,
+                  resizeMode: 'contain'
+                }}
               />
             </View>
 
-            {/* SIMPLIFIED FIXED LAYOUT for info panel and button */}
-            <View style={styles.infoPanel}>
+            {/* Info panel remains at the bottom, responsive */}
+            <View style={[styles.infoPanel, { flex: 1, minHeight: 120 }]}>
               {/* Fixed info content - no scrolling */}
               <View style={styles.infoPanelContent}>
                 <Text style={styles.modalDate}>
