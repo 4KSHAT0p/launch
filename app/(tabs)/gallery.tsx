@@ -742,11 +742,6 @@ const styles = StyleSheet.create({
     color: "white",
     marginBottom: 4
   },
-  subtitle: {
-    fontSize: 16,
-    color: "rgba(255,255,255,0.8)",
-    fontWeight: "500",
-  },
   scrollContent: {
     flex: 1,
     paddingHorizontal: SPACING,
@@ -899,10 +894,6 @@ const styles = StyleSheet.create({
     height: "60%",
     width: "100%",
     position: "relative",
-  },
-  fullImage: {
-    width: "100%",
-    height: "100%",
   },
   infoPanel: {
     flex: 1,
