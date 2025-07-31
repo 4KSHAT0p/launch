@@ -1,9 +1,9 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useFocusEffect } from '@react-navigation/native';
 import { CameraType, CameraView, useCameraPermissions } from "expo-camera";
 import * as Location from "expo-location";
 import { useRouter } from "expo-router";
-import { useEffect, useRef, useState, useCallback } from "react";
-import { useFocusEffect } from '@react-navigation/native';
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
@@ -11,6 +11,7 @@ import {
   Dimensions,
   Image,
   Modal,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -44,6 +45,7 @@ export default function Index() {
   const [saving, setSaving] = useState(false);
   const [saveToDeviceLoading, setSaveToDeviceLoading] = useState(false);
   const [currentGif, setCurrentGif] = useState(GIFS[0]);
+  const [cameraButtonPressed, setCameraButtonPressed] = useState(false);
   const cameraRef = useRef<any>(null);
   const { hideTabBar, showTabBar } = useTabBarVisibilityContext();
 
@@ -228,10 +230,14 @@ export default function Index() {
             />
 
             <View style={styles.titleContainer}>
-              <Text style={styles.appTitle}>ReMiniS</Text>
+              <Image 
+                source={require('../../assets/images/Reminis_Text.png')}
+                style={styles.logoImage}
+                resizeMode="contain"
+              />
               <Text style={styles.appFullForm}>Reliable Minimalist Souvenirs</Text>
               {photos && (
-                <Text style={styles.photoCount}>{photos.length} captured</Text>
+                <Text style={styles.photoCount}>{photos.length} Captured</Text>
               )}
             </View>
           </View>
@@ -245,14 +251,20 @@ export default function Index() {
         </ScrollView>
       )}
 
-      {/* Floating Action Button */}
+      {/* Camera Action Bar */}
       {!cameraVisible && !capturedPhoto && (
         <TouchableOpacity
-          style={styles.fab}
+          style={[
+            styles.cameraActionBar,
+            cameraButtonPressed && styles.cameraActionBarPressed
+          ]}
           onPress={openCamera}
-          activeOpacity={0.7}
+          onPressIn={() => setCameraButtonPressed(true)}
+          onPressOut={() => setCameraButtonPressed(false)}
+          activeOpacity={1}
         >
-          <Ionicons name="camera" size={32} color="white" />
+          <Ionicons name="camera" size={24} color="white" />
+          <Text style={styles.cameraActionText}>Take a picture</Text>
         </TouchableOpacity>
       )}
 
@@ -582,12 +594,18 @@ const styles = StyleSheet.create({
     color: "#333",
     marginBottom: 4,
   },
+  logoImage: {
+    width: 400,
+    height: 200,
+  },
   appFullForm: {
     fontSize: 18,
-    fontWeight: "600",
-    color: "#007AFF",
+    fontWeight: "700",
+    color: "#000",
     marginBottom: 8,
-    letterSpacing: 0.5,
+    letterSpacing: 1,
+    fontStyle: "italic",
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
   },
   appSlogan: {
     fontSize: 16,
@@ -596,21 +614,24 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   photoCount: {
-    fontSize: 14,
-    color: "#000",
-    fontWeight: "600",
+    fontSize: 18,
+    color: "#34C759",
+    fontWeight: "700",
+    fontFamily: Platform.OS === 'ios' ? 'Avenir-Heavy' : 'sans-serif-medium',
   },
   contentSection: {
     padding: 24,
     alignItems: "center",
   },
   welcomeText: {
-    fontSize: 16,
+    fontSize: 15,
     color: "#000",
     textAlign: "center",
-    lineHeight: 24,
+    lineHeight: 22,
     marginBottom: 32,
     paddingHorizontal: 10,
+    fontWeight: "700",
+    fontFamily: Platform.OS === 'ios' ? 'Avenir-Heavy' : 'sans-serif-medium',
   },
   getStartedButton: {
     backgroundColor: "#007AFF",
@@ -632,5 +653,37 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
     marginRight: 8,
+  },
+  
+  // Camera Action Bar Styles
+  cameraActionBar: {
+    position: "absolute",
+    bottom: 32,
+    left: 16,
+    right: 16,
+    backgroundColor: "#667eea",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    borderRadius: 12,
+    shadowColor: "#667eea",
+    shadowOpacity: 0.4,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 12,
+    elevation: 8,
+    zIndex: 10,
+  },
+  cameraActionBarPressed: {
+    backgroundColor: "#007AFF",
+    shadowColor: "#007AFF",
+  },
+  cameraActionText: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "600",
+    marginLeft: 12,
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
   },
 });

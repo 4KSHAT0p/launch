@@ -1,76 +1,187 @@
-import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions, SafeAreaView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
+import React from "react";
+import {
+  Image,
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View
+} from "react-native";
 
-const AMOUNTS = [10, 20, 50, 100, 200, 500];
-
-export default function Donate() {
-  const [selected, setSelected] = useState<number | null>(null);
-  const router = useRouter();
-
+export default function AboutUs() {
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.headerRow}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#fff" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Contribute</Text>
-      </View>
-
-      {/* Heart Icon */}
-      <View style={styles.heartContainer}>
-        <Ionicons name="heart" size={64} color="#FF6B81" style={styles.heartIcon} />
-      </View>
-
-      {/* Title & Description */}
-      <Text style={styles.title}>We Love You!</Text>
-      <Text style={styles.description}>
-        We run 100% on your contributions and support. If you enjoy our services,
-      </Text>
-      <Text style={styles.description}>
-        Please consider supporting us.
-      </Text>
-
-      {/* Amount Selection */}
-      <View style={styles.amountGrid}>
-        {AMOUNTS.map((amt) => (
-          <TouchableOpacity
-            key={amt}
-            style={[
-              styles.amountButton,
-              selected === amt && styles.amountButtonSelected,
-            ]}
-            onPress={() => setSelected(amt)}
-            activeOpacity={0.8}
-          >
-            <Text style={[
-              styles.amountText,
-              selected === amt && styles.amountTextSelected,
-            ]}>
-              ₹{amt.toFixed(2)}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-
-      {/* Donate Button */}
-      <TouchableOpacity
-        style={[
-          styles.donateButton,
-          !selected && styles.donateButtonDisabled,
-        ]}
-        disabled={!selected}
-        onPress={() => {
-          // Implement donation logic here (e.g., Google Play Billing)
-        }}
-        activeOpacity={selected ? 0.8 : 1}
+      <ScrollView 
+        style={styles.scrollView} 
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.donateButtonText}>
-          {selected ? `Donate ₹${selected.toFixed(2)}` : "Select Amount"}
-        </Text>
-      </TouchableOpacity>
+        {/* Header with Logo */}
+        <View style={styles.headerContainer}>
+          <Image 
+            source={require('../../assets/images/splash.png')}
+            style={styles.logoImage}
+            resizeMode="contain"
+          />
+        </View>
+
+        {/* Mission Section */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Our Mission</Text>
+          <Text style={styles.description}>
+            Transforming ordinary photos into enriched digital souvenirs by automatically 
+            capturing the context that makes every moment memorable.
+          </Text>
+        </View>
+
+        {/* Contact & Support Section */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Contact & Support</Text>
+          
+          <View style={styles.contactItem}>
+            <View style={styles.contactIcon}>
+              <Ionicons name="mail" size={24} color="#667eea" />
+            </View>
+            <View style={styles.contactContent}>
+              <Text style={styles.contactTitle}>Support Email</Text>
+              <Text style={styles.contactDescription}>
+                For help and feedback:{'\n'}
+                <Text style={styles.emailText}>agile.tech.64@gmail.com</Text>
+              </Text>
+            </View>
+          </View>
+
+          <View style={styles.contactItem}>
+            <View style={styles.contactIcon}>
+              <Ionicons name="bulb" size={24} color="#667eea" />
+            </View>
+            <View style={styles.contactContent}>
+              <Text style={styles.contactTitle}>Feature Requests</Text>
+              <Text style={styles.contactDescription}>
+                Mail us your suggestions for improvements
+              </Text>
+            </View>
+          </View>
+
+          <View style={styles.contactItem}>
+            <View style={styles.contactIcon}>
+              <Ionicons name="bug" size={24} color="#667eea" />
+            </View>
+            <View style={styles.contactContent}>
+              <Text style={styles.contactTitle}>Bug Reports</Text>
+              <Text style={styles.contactDescription}>
+                Report issues and help us improve the app
+              </Text>
+            </View>
+          </View>
+
+          {/* Social Media Links */}
+          <View style={styles.socialSection}>
+            <Text style={styles.socialTitle}>Follow Us</Text>
+            <View style={styles.socialLinks}>
+              <View style={styles.socialIcon}>
+                <Ionicons name="logo-instagram" size={28} color="#E4405F" />
+              </View>
+              <View style={styles.socialIcon}>
+                <Ionicons name="logo-twitter" size={28} color="#1DA1F2" />
+              </View>
+              <View style={styles.socialIcon}>
+                <Ionicons name="logo-github" size={28} color="#333" />
+              </View>
+            </View>
+          </View>
+        </View>
+
+        {/* Technical Excellence Section */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Technical Excellence</Text>
+          
+          <View style={styles.featureItem}>
+            <View style={styles.featureIcon}>
+              <Ionicons name="shield-checkmark" size={24} color="#667eea" />
+            </View>
+            <View style={styles.featureContent}>
+              <Text style={styles.featureTitle}>Privacy-first approach</Text>
+              <Text style={styles.featureDescription}>Your data stays on your device</Text>
+            </View>
+          </View>
+
+          <View style={styles.featureItem}>
+            <View style={styles.featureIcon}>
+              <Ionicons name="speedometer" size={24} color="#667eea" />
+            </View>
+            <View style={styles.featureContent}>
+              <Text style={styles.featureTitle}>Lightweight design</Text>
+              <Text style={styles.featureDescription}>Minimal storage footprint</Text>
+            </View>
+          </View>
+
+          <View style={styles.featureItem}>
+            <View style={styles.featureIcon}>
+              <Ionicons name="phone-portrait" size={24} color="#667eea" />
+            </View>
+            <View style={styles.featureContent}>
+              <Text style={styles.featureTitle}>Cross-platform compatibility</Text>
+              <Text style={styles.featureDescription}>Works seamlessly everywhere</Text>
+            </View>
+          </View>
+
+          <View style={styles.featureItem}>
+            <View style={styles.featureIcon}>
+              <Ionicons name="cloud-offline" size={24} color="#667eea" />
+            </View>
+            <View style={styles.featureContent}>
+              <Text style={styles.featureTitle}>Offline capabilities</Text>
+              <Text style={styles.featureDescription}>Capture memories anywhere</Text>
+            </View>
+          </View>
+        </View>
+
+        {/* What We Do Section */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>What We Do</Text>
+          <Text style={styles.description}>
+            Every photo you capture is automatically enriched with GPS location, 
+            weather data, and precise timestamps to create lasting digital souvenirs 
+            that preserve not just the image, but the complete story of the moment.
+          </Text>
+        </View>
+
+        {/* Key Features Section */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Key Features</Text>
+          
+          <View style={styles.keyFeatureItem}>
+            <Ionicons name="location" size={20} color="#34C759" />
+            <Text style={styles.keyFeatureText}>Automatic GPS tagging</Text>
+          </View>
+          
+          <View style={styles.keyFeatureItem}>
+            <Ionicons name="partly-sunny" size={20} color="#34C759" />
+            <Text style={styles.keyFeatureText}>Weather integration</Text>
+          </View>
+          
+          <View style={styles.keyFeatureItem}>
+            <Ionicons name="time" size={20} color="#34C759" />
+            <Text style={styles.keyFeatureText}>Precise timestamps</Text>
+          </View>
+          
+          <View style={styles.keyFeatureItem}>
+            <Ionicons name="search" size={20} color="#34C759" />
+            <Text style={styles.keyFeatureText}>Smart search & filtering</Text>
+          </View>
+        </View>
+
+        {/* Footer */}
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>
+            Made with ❤️ for memory keepers
+          </Text>
+          <Text style={styles.versionText}>Version 1.0.0</Text>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -78,98 +189,204 @@ export default function Donate() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#181818",
+    backgroundColor: "#f8f9fa",
+  },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    paddingBottom: 32,
+  },
+  headerContainer: {
     alignItems: "center",
-    paddingTop: 24,
-  },
-  headerRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "100%",
-    paddingHorizontal: 16,
-    marginBottom: 12,
-  },
-  backButton: {
-    padding: 8,
-    marginRight: 8,
-  },
-  headerTitle: {
-    color: "#fff",
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  heartContainer: {
-    alignItems: "center",
-    marginVertical: 16,
-  },
-  heartIcon: {
-    shadowColor: "#FF6B81",
-    shadowOpacity: 0.5,
-    shadowRadius: 8,
+    backgroundColor: "white",
+    paddingTop: 40,
+    paddingBottom: 30,
+    paddingHorizontal: 20,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 5,
+    marginBottom: 24,
   },
-  title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: "#fff",
-    textAlign: "center",
-    marginBottom: 12,
+  logoImage: {
+    width: 180,
+    height: 180,
+    marginBottom: 16,
+  },
+  appName: {
+    fontSize: 32,
+    fontWeight: "700",
+    color: "#333",
+    marginBottom: 8,
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
+  },
+  tagline: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#667eea",
+    fontStyle: "italic",
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
+  },
+  section: {
+    marginHorizontal: 20,
+    marginBottom: 24,
+    backgroundColor: "white",
+    borderRadius: 16,
+    padding: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  sectionTitle: {
+    fontSize: 22,
+    fontWeight: "700",
+    color: "#333",
+    marginBottom: 16,
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
   },
   description: {
     fontSize: 16,
-    color: "#ccc",
-    textAlign: "center",
-    marginBottom: 4,
-    paddingHorizontal: 24,
+    color: "#666",
+    lineHeight: 24,
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
   },
-  amountGrid: {
+  featureItem: {
     flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
-    marginTop: 32,
-    marginBottom: 32,
-    gap: 12,
-  },
-  amountButton: {
-    backgroundColor: "#232323",
-    borderRadius: 12,
-    paddingVertical: 16,
-    paddingHorizontal: 24,
-    margin: 6,
-    minWidth: 100,
     alignItems: "center",
-    borderWidth: 2,
-    borderColor: "#232323",
+    marginBottom: 16,
+    paddingVertical: 8,
   },
-  amountButtonSelected: {
-    borderColor: "#FF6B81",
-    backgroundColor: "#2c2c2c",
-  },
-  amountText: {
-    color: "#fff",
-    fontSize: 18,
-    fontWeight: "600",
-  },
-  amountTextSelected: {
-    color: "#FF6B81",
-  },
-  donateButton: {
-    backgroundColor: "#FF6B81",
+  featureIcon: {
+    width: 48,
+    height: 48,
     borderRadius: 24,
-    paddingVertical: 18,
-    paddingHorizontal: 32,
-    width: Dimensions.get("window").width - 48,
+    backgroundColor: "rgba(102, 126, 234, 0.1)",
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 16,
+  },
+  featureContent: {
+    flex: 1,
+  },
+  featureTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#333",
+    marginBottom: 4,
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
+  },
+  featureDescription: {
+    fontSize: 14,
+    color: "#666",
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
+  },
+  keyFeatureItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 12,
+    paddingVertical: 4,
+  },
+  keyFeatureText: {
+    fontSize: 16,
+    color: "#333",
+    marginLeft: 12,
+    fontWeight: "500",
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
+  },
+  footer: {
     alignItems: "center",
     marginTop: 16,
-    marginBottom: 24,
-    elevation: 3,
+    marginBottom: 16,
   },
-  donateButtonDisabled: {
-    backgroundColor: "#444",
+  footerText: {
+    fontSize: 16,
+    color: "#666",
+    fontWeight: "500",
+    marginBottom: 8,
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
   },
-  donateButtonText: {
-    color: "#fff",
+  versionText: {
+    fontSize: 14,
+    color: "#999",
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
+  },
+  
+  // Contact & Support Styles
+  contactItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 16,
+    paddingVertical: 8,
+  },
+  contactIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: "rgba(102, 126, 234, 0.1)",
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 16,
+  },
+  contactContent: {
+    flex: 1,
+  },
+  contactTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#333",
+    marginBottom: 4,
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
+  },
+  contactDescription: {
+    fontSize: 14,
+    color: "#666",
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
+  },
+  emailText: {
+    fontSize: 14,
+    color: "#34C759",
+    fontWeight: "700",
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
+  },
+  
+  // Social Media Styles
+  socialSection: {
+    marginTop: 20,
+    paddingTop: 20,
+    borderTopWidth: 1,
+    borderTopColor: "rgba(0,0,0,0.1)",
+  },
+  socialTitle: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: "600",
+    color: "#333",
+    marginBottom: 16,
+    textAlign: "center",
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
+  },
+  socialLinks: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  socialIcon: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: "rgba(0,0,0,0.05)",
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: 12,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
 });

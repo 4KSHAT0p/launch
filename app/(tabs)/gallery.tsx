@@ -1,26 +1,138 @@
 import { Ionicons } from "@expo/vector-icons";
+import { BlurView } from 'expo-blur';
 import { useLocalSearchParams, useNavigation } from "expo-router";
+import * as Sharing from 'expo-sharing';
 import { StatusBar } from "expo-status-bar";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
+  Animated,
   Dimensions,
+  GestureResponderEvent,
   Image,
   Modal,
+  Platform,
+  Pressable,
+  ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
-  View,
-  FlatList,
-  Pressable,
-  GestureResponderEvent,
+  View
 } from "react-native";
 import ViewShot from "react-native-view-shot";
-import { usePhotoContext, PhotoData } from "../context/PhotoContext";
+import { PhotoData, usePhotoContext } from "../context/PhotoContext";
 import { useTabBarVisibilityContext } from "../context/TabBarVisibilityContext";
-import * as Sharing from 'expo-sharing';
 const width = Dimensions.get("window").width;
+const COLUMN_COUNT = 2;
+const SPACING = 12;
+const CARD_WIDTH = (width - (COLUMN_COUNT + 1) * SPACING) / COLUMN_COUNT;
+
+// Animated Photo Card Component
+const AnimatedPhotoCard = ({ photo, onPress, onLongPress, isSelected, actionMode }: {
+  photo: PhotoData;
+  onPress: () => void;
+  onLongPress: () => void;
+  isSelected: boolean;
+  actionMode: boolean;
+}) => {
+  const scaleAnim = useRef(new Animated.Value(0)).current;
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const [imageHeight, setImageHeight] = useState(200);
+
+  useEffect(() => {
+    // Fade in animation when component mounts
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+
+    // Scale in animation
+    Animated.spring(scaleAnim, {
+      toValue: 1,
+      friction: 8,
+      tension: 100,
+      useNativeDriver: true,
+    }).start();
+
+    // Calculate image aspect ratio for masonry effect
+    Image.getSize(photo.uri, (w, h) => {
+      const aspectRatio = h / w;
+      const calculatedHeight = CARD_WIDTH * aspectRatio;
+      // Clamp height between 150 and 300 for better layout
+      setImageHeight(Math.max(150, Math.min(300, calculatedHeight)));
+    });
+  }, []);
+
+  const handlePressIn = () => {
+    Animated.spring(scaleAnim, {
+      toValue: 0.95,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const handlePressOut = () => {
+    Animated.spring(scaleAnim, {
+      toValue: 1,
+      friction: 8,
+      tension: 100,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  return (
+    <Animated.View
+      style={[
+        styles.animatedContainer,
+        {
+          opacity: fadeAnim,
+          transform: [{ scale: scaleAnim }],
+        },
+      ]}
+    >
+      <Pressable
+        onPress={onPress}
+        onLongPress={onLongPress}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        style={[
+          styles.photoCard,
+          {
+            width: CARD_WIDTH,
+            height: imageHeight,
+            borderWidth: isSelected ? 3 : 0,
+            borderColor: isSelected ? "#34C759" : "transparent",
+            opacity: actionMode && !isSelected ? 0.5 : 1,
+          }
+        ]}
+      >
+        <View style={styles.gradientBorder}>
+          <Image
+            source={{ uri: photo.uri }}
+            style={styles.thumbnail}
+            resizeMode="cover"
+          />
+          <View style={styles.cardOverlay} />
+          {photo.address && (
+            <View style={styles.addressTag}>
+              <Ionicons name="location" size={12} color="white" />
+              <Text style={styles.addressText} numberOfLines={1}>
+                {photo.address}
+              </Text>
+            </View>
+          )}
+          {actionMode && isSelected && (
+            <View style={styles.selectedTick}>
+              <Ionicons name="checkmark-circle" size={24} color="#34C759" />
+            </View>
+          )}
+        </View>
+      </Pressable>
+    </Animated.View>
+  );
+};
 
 const Gallery = () => {
   const { photos, saveToGallery, deletePhoto } = usePhotoContext();
@@ -29,6 +141,11 @@ const Gallery = () => {
   const [loading, setLoading] = useState(false);
   const [actionMode, setActionMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showSearchBar, setShowSearchBar] = useState(false);
+  const [sortBy, setSortBy] = useState<'date' | 'location' | 'weather'>('date');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+  const [filterBy, setFilterBy] = useState<'all' | 'thisMonth' | 'thisYear'>('all');
   const { hideTabBar, showTabBar } = useTabBarVisibilityContext();
   const { photoId } = useLocalSearchParams<{ photoId?: string }>();
   const navigation = useNavigation();
@@ -198,74 +315,106 @@ const Gallery = () => {
     }
   };
 
-  // Calculate rows with dynamic sizing
-  const getPhotoRows = () => {
-    const rows = [];
-    const maxColumns = 3;
+  // Utility functions for filtering and sorting
+  const getPhotosBreakdown = () => {
+    const now = new Date();
+    const thisMonth = photos.filter(photo => {
+      const photoDate = new Date(photo.timestamp);
+      return photoDate.getMonth() === now.getMonth() && photoDate.getFullYear() === now.getFullYear();
+    }).length;
+    
+    const thisYear = photos.filter(photo => {
+      const photoDate = new Date(photo.timestamp);
+      return photoDate.getFullYear() === now.getFullYear();
+    }).length;
 
-    for (let i = 0; i < photos.length; i += maxColumns) {
-      const rowPhotos = photos.slice(i, i + maxColumns);
-      const photosInRow = rowPhotos.length;
-      const photoWidth = (width - 48 - (photosInRow - 1) * 8) / photosInRow; // Account for margins
+    return { total: photos.length, thisMonth, thisYear };
+  };
 
-      rows.push({
-        photos: rowPhotos,
-        width: photoWidth,
-        startIndex: i
+  const filterPhotos = (photos: PhotoData[]) => {
+    let filtered = photos;
+
+    // Apply text search
+    if (searchQuery.trim()) {
+      filtered = filtered.filter(photo => 
+        photo.address?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        photo.weather?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        new Date(photo.timestamp).toLocaleDateString().includes(searchQuery)
+      );
+    }
+
+    // Apply date filter
+    if (filterBy !== 'all') {
+      const now = new Date();
+      filtered = filtered.filter(photo => {
+        const photoDate = new Date(photo.timestamp);
+        if (filterBy === 'thisMonth') {
+          return photoDate.getMonth() === now.getMonth() && photoDate.getFullYear() === now.getFullYear();
+        } else if (filterBy === 'thisYear') {
+          return photoDate.getFullYear() === now.getFullYear();
+        }
+        return true;
       });
     }
 
-    return rows;
+    return filtered;
   };
 
-  const photoRows = getPhotoRows();
+  const sortPhotos = (photos: PhotoData[]) => {
+    return [...photos].sort((a, b) => {
+      let comparison = 0;
+      
+      switch (sortBy) {
+        case 'date':
+          comparison = new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
+          break;
+        case 'location':
+          comparison = (a.address || '').localeCompare(b.address || '');
+          break;
+        case 'weather':
+          comparison = (a.weather || '').localeCompare(b.weather || '');
+          break;
+      }
+      
+      return sortOrder === 'asc' ? comparison : -comparison;
+    });
+  };
 
-  const renderPhotoRow = ({ item: row, index: rowIndex }: { item: any; index: number }) => {
+  const processedPhotos = sortPhotos(filterPhotos(photos));
+  const photoBreakdown = getPhotosBreakdown();
+
+  // Masonry layout calculation
+  const getMasonryData = () => {
+    const columns: PhotoData[][] = Array(COLUMN_COUNT).fill(null).map(() => []);
+    const columnHeights = Array(COLUMN_COUNT).fill(0);
+
+    processedPhotos.forEach((photo) => {
+      // Find the shortest column
+      const shortestColumnIndex = columnHeights.indexOf(Math.min(...columnHeights));
+      columns[shortestColumnIndex].push(photo);
+      
+      // Estimate height for layout (will be corrected by individual cards)
+      columnHeights[shortestColumnIndex] += 200; // Average estimated height
+    });
+
+    return columns;
+  };
+
+  const masonryColumns = getMasonryData();
+
+  const renderMasonryColumn = (columnPhotos: PhotoData[], columnIndex: number) => {
     return (
-      <View style={styles.photoRow}>
-        {row.photos.map((photo: PhotoData, photoIndex: number) => {
-          const isSelected = selectedIds.includes(photo.id);
-          const isLastInRow = photoIndex === row.photos.length - 1;
-
-          return (
-            <Pressable
-              key={photo.id}
-              onPress={() => handleThumbnailPress(photo.id)}
-              onLongPress={() => handleThumbnailLongPress(photo.id)}
-              style={[
-                styles.photoCard,
-                {
-                  width: row.width,
-                  height: row.width * 0.8,
-                  marginRight: isLastInRow ? 0 : 8,
-                  borderWidth: isSelected ? 3 : 0,
-                  borderColor: isSelected ? "#667eea" : "transparent",
-                  opacity: actionMode && !isSelected ? 0.5 : 1,
-                }
-              ]}
-            >
-              <Image
-                source={{ uri: photo.uri }}
-                style={styles.thumbnail}
-                resizeMode="cover"
-              />
-              <View style={styles.cardOverlay} />
-              {photo.address && (
-                <View style={styles.addressTag}>
-                  <Ionicons name="location" size={12} color="white" />
-                  <Text style={styles.addressText} numberOfLines={1}>
-                    {photo.address}
-                  </Text>
-                </View>
-              )}
-              {actionMode && isSelected && (
-                <View style={styles.selectedTick}>
-                  <Ionicons name="checkmark-circle" size={24} color="#667eea" />
-                </View>
-              )}
-            </Pressable>
-          );
-        })}
+      <View key={columnIndex} style={styles.masonryColumn}>
+        {columnPhotos.map((photo) => (
+          <AnimatedPhotoCard
+            key={photo.id}
+            photo={photo}
+            onPress={() => handleThumbnailPress(photo.id)}
+            onLongPress={() => handleThumbnailLongPress(photo.id)}
+            isSelected={selectedIds.includes(photo.id)}
+            actionMode={actionMode}
+          />
+        ))}
       </View>
     );
   };
@@ -322,23 +471,156 @@ const Gallery = () => {
           </View>
         ) : (
           <>
-            <Text style={styles.title}>Your Memories</Text>
-            <Text style={styles.subtitle}>
-              {photos.length} photos • Hold to select
-            </Text>
+            {/* Main Header Row */}
+            <View style={styles.headerMainRow}>
+              <View style={styles.headerTitleSection}>
+                <Text style={styles.title}>Your Memories 📸</Text>
+                <View style={styles.photoBreakdownContainer}>
+                  <View style={styles.photoBreakdownRow}>
+                    <View style={styles.breakdownItem}>
+                      <Text style={styles.breakdownNumber}>{photoBreakdown.total}</Text>
+                      <Text style={styles.breakdownLabel}>Total</Text>
+                    </View>
+                    <View style={styles.breakdownDivider} />
+                    <View style={styles.breakdownItem}>
+                      <Text style={styles.breakdownNumber}>{photoBreakdown.thisMonth}</Text>
+                      <Text style={styles.breakdownLabel}>This Month</Text>
+                    </View>
+                    <View style={styles.breakdownDivider} />
+                    <View style={styles.breakdownItem}>
+                      <Text style={styles.breakdownNumber}>{photoBreakdown.thisYear}</Text>
+                      <Text style={styles.breakdownLabel}>This Year</Text>
+                    </View>
+                  </View>
+                  
+                  <TouchableOpacity 
+                    style={styles.searchToggle}
+                    onPress={() => setShowSearchBar(!showSearchBar)}
+                  >
+                    <Ionicons name="search" size={24} color="white" />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+
+            {/* Search Bar (Expandable) */}
+            {showSearchBar && (
+              <View style={styles.searchSection}>
+                <View style={styles.searchInputContainer}>
+                  <Ionicons name="search" size={16} color="rgba(255,255,255,0.7)" />
+                  <TextInput
+                    style={styles.searchInput}
+                    placeholder="Search by location, date, or weather..."
+                    placeholderTextColor="rgba(255,255,255,0.7)"
+                    value={searchQuery}
+                    onChangeText={setSearchQuery}
+                    autoCapitalize="none"
+                  />
+                  {searchQuery.length > 0 && (
+                    <TouchableOpacity onPress={() => setSearchQuery('')}>
+                      <Ionicons name="close-circle" size={16} color="rgba(255,255,255,0.7)" />
+                    </TouchableOpacity>
+                  )}
+                </View>
+              </View>
+            )}
+
+            {/* Filter and Sort Controls */}
+            <View style={styles.controlsSection}>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.controlsScrollView}>
+                {/* Date Filter Pills */}
+                <TouchableOpacity 
+                  style={[styles.filterPill, filterBy === 'all' && styles.filterPillActive]}
+                  onPress={() => setFilterBy('all')}
+                >
+                  <Text style={[styles.filterPillText, filterBy === 'all' && styles.filterPillTextActive]}>
+                    All
+                  </Text>
+                </TouchableOpacity>
+                
+                <TouchableOpacity 
+                  style={[styles.filterPill, filterBy === 'thisMonth' && styles.filterPillActive]}
+                  onPress={() => setFilterBy('thisMonth')}
+                >
+                  <Text style={[styles.filterPillText, filterBy === 'thisMonth' && styles.filterPillTextActive]}>
+                    This Month
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity 
+                  style={[styles.filterPill, filterBy === 'thisYear' && styles.filterPillActive]}
+                  onPress={() => setFilterBy('thisYear')}
+                >
+                  <Text style={[styles.filterPillText, filterBy === 'thisYear' && styles.filterPillTextActive]}>
+                    This Year
+                  </Text>
+                </TouchableOpacity>
+
+                <View style={styles.sortControlsContainer}>
+                  {/* Sort By */}
+                  <TouchableOpacity 
+                    style={[styles.sortPill, sortBy === 'date' && styles.sortPillActive]}
+                    onPress={() => setSortBy('date')}
+                  >
+                    <Ionicons name="calendar" size={14} color={sortBy === 'date' ? '#667eea' : 'rgba(255,255,255,0.8)'} />
+                    <Text style={[styles.sortPillText, sortBy === 'date' && styles.sortPillTextActive]}>Date</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity 
+                    style={[styles.sortPill, sortBy === 'location' && styles.sortPillActive]}
+                    onPress={() => setSortBy('location')}
+                  >
+                    <Ionicons name="location" size={14} color={sortBy === 'location' ? '#667eea' : 'rgba(255,255,255,0.8)'} />
+                    <Text style={[styles.sortPillText, sortBy === 'location' && styles.sortPillTextActive]}>Location</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity 
+                    style={[styles.sortPill, sortBy === 'weather' && styles.sortPillActive]}
+                    onPress={() => setSortBy('weather')}
+                  >
+                    <Ionicons name="partly-sunny" size={14} color={sortBy === 'weather' ? '#667eea' : 'rgba(255,255,255,0.8)'} />
+                    <Text style={[styles.sortPillText, sortBy === 'weather' && styles.sortPillTextActive]}>Weather</Text>
+                  </TouchableOpacity>
+
+                  {/* Sort Order Toggle */}
+                  <TouchableOpacity 
+                    style={styles.sortOrderButton}
+                    onPress={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+                  >
+                    <Ionicons 
+                      name={sortOrder === 'asc' ? 'arrow-up' : 'arrow-down'} 
+                      size={16} 
+                      color="rgba(255,255,255,0.8)" 
+                    />
+                  </TouchableOpacity>
+                </View>
+              </ScrollView>
+            </View>
+
+            {/* Results Summary */}
+            {(searchQuery || filterBy !== 'all') && (
+              <View style={styles.resultsSummary}>
+                <Text style={styles.resultsText}>
+                  {processedPhotos.length} of {photos.length} photos
+                  {searchQuery && ` matching "${searchQuery}"`}
+                </Text>
+              </View>
+            )}
           </>
         )}
       </View>
 
       <View style={styles.scrollContent}>
-        <FlatList
-          data={photoRows}
-          renderItem={renderPhotoRow}
-          keyExtractor={(item, index) => `row-${index}`}
-          scrollEnabled
+        <ScrollView 
           showsVerticalScrollIndicator={false}
-          extraData={{ actionMode, selectedIds }}
-        />
+          contentContainerStyle={styles.scrollContainer}
+        >
+          <View style={styles.masonryContainer}>
+            {masonryColumns.map((columnPhotos, columnIndex) => 
+              renderMasonryColumn(columnPhotos, columnIndex)
+            )}
+          </View>
+        </ScrollView>
       </View>
 
       {selectedPhoto && currentPhoto && (
@@ -445,36 +727,59 @@ const styles = StyleSheet.create({
   header: {
     paddingTop: 40,
     paddingBottom: 20,
-    paddingHorizontal: 20,
-    backgroundColor: '#007AFF',
+    paddingHorizontal: 16,
+    backgroundColor: '#34C759',
     borderBottomLeftRadius: 25,
     borderBottomRightRadius: 25,
   },
   title: {
     fontSize: 32,
-    fontWeight: "bold",
+    fontWeight: "700",
     color: "white",
     marginBottom: 4,
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
   },
   subtitle: {
     fontSize: 16,
     color: "rgba(255,255,255,0.8)",
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
+    fontWeight: "500",
   },
   scrollContent: {
-    padding: 16,
     flex: 1,
+    paddingHorizontal: SPACING,
+    paddingTop: SPACING,
+  },
+  scrollContainer: {
+    paddingBottom: 20,
+  },
+  masonryContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  masonryColumn: {
+    flex: 1,
+    marginHorizontal: SPACING / 2,
+  },
+  animatedContainer: {
+    marginBottom: SPACING,
   },
   photoCard: {
-    borderRadius: 16,
+    borderRadius: 20,
     backgroundColor: "white",
     shadowColor: "#000",
     shadowOpacity: 0.15,
-    shadowOffset: { width: 0, height: 4 },
-    shadowRadius: 12,
-    elevation: 8,
+    shadowOffset: { width: 0, height: 8 },
+    shadowRadius: 20,
+    elevation: 12,
     overflow: "hidden",
     position: "relative",
-    marginBottom: 12,
+  },
+  gradientBorder: {
+    flex: 1,
+    borderRadius: 20,
+    overflow: 'hidden',
+    position: 'relative',
   },
   thumbnail: {
     width: "100%",
@@ -485,35 +790,41 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    height: '50%',
-    backgroundColor: 'rgba(0,0,0,0.4)',
+    height: '60%',
+    backgroundColor: 'rgba(0,0,0,0.4)', // Gradient effect with transparency
   },
   addressTag: {
     position: "absolute",
-    bottom: 8,
-    left: 8,
-    right: 8,
-    backgroundColor: "rgba(0,0,0,0.7)",
-    borderRadius: 8,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+    bottom: 12,
+    left: 12,
+    right: 12,
+    backgroundColor: "rgba(0,0,0,0.8)",
+    borderRadius: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
     flexDirection: "row",
     alignItems: "center",
   },
   addressText: {
     color: "white",
-    fontSize: 11,
-    fontWeight: "500",
-    marginLeft: 4,
+    fontSize: 12,
+    fontWeight: "600",
+    marginLeft: 6,
     flex: 1,
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
   },
   selectedTick: {
     position: "absolute",
-    top: 8,
-    right: 8,
-    backgroundColor: "rgba(255,255,255,0.85)",
+    top: 12,
+    right: 12,
+    backgroundColor: "rgba(255,255,255,0.95)",
     borderRadius: 20,
-    padding: 2,
+    padding: 4,
+    shadowColor: "#000",
+    shadowOpacity: 0.2,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 4,
   },
   emptyContainer: {
     flex: 1,
@@ -536,9 +847,10 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 28,
-    fontWeight: "bold",
+    fontWeight: "700",
     color: "white",
     marginBottom: 8,
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
   },
   emptySubText: {
     fontSize: 16,
@@ -546,6 +858,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 32,
     lineHeight: 22,
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
+    fontWeight: "500",
   },
   emptyButton: {
     flexDirection: 'row',
@@ -557,8 +871,9 @@ const styles = StyleSheet.create({
   },
   emptyButtonText: {
     color: '#667eea',
-    fontWeight: '600',
+    fontWeight: '700',
     marginLeft: 8,
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
   },
   modalContainer: {
     flex: 1,
@@ -587,7 +902,8 @@ const styles = StyleSheet.create({
   photoCounter: {
     color: "white",
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: "700",
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
   },
   shareButton: {
     width: 44,
@@ -617,9 +933,10 @@ const styles = StyleSheet.create({
   },
   modalDate: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: "700",
     color: "white",
     marginBottom: 12,
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
   },
   infoRow: {
     flexDirection: 'row',
@@ -634,6 +951,8 @@ const styles = StyleSheet.create({
     color: "white",
     marginLeft: 10,
     flex: 1,
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
+    fontWeight: "500",
   },
   actionButtonContainer: {
     borderTopWidth: 1,
@@ -654,9 +973,10 @@ const styles = StyleSheet.create({
   },
   actionButtonText: {
     color: "white",
-    fontWeight: "600",
+    fontWeight: "700",
     marginLeft: 8,
     fontSize: 16,
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
   },
   spacer: {
     flex: 1,
@@ -664,6 +984,157 @@ const styles = StyleSheet.create({
   photoRow: {
     flexDirection: 'row',
     marginBottom: 12,
+  },
+  // Enhanced Header Styles
+  headerMainRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 12,
+    paddingRight: 4,
+  },
+  headerTitleSection: {
+    flex: 1,
+  },
+  photoBreakdownContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  photoBreakdownRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderRadius: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+  },
+  breakdownItem: {
+    alignItems: 'center',
+    flex: 1,
+  },
+  breakdownNumber: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#667eea',
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
+  },
+  breakdownLabel: {
+    fontSize: 12,
+    color: 'rgba(255,255,255,0.8)',
+    marginTop: 2,
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
+    fontWeight: '500',
+  },
+  breakdownDivider: {
+    width: 1,
+    height: 30,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    marginHorizontal: 8,
+  },
+  searchToggle: {
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    borderRadius: 20,
+    padding: 10,
+    marginLeft: 12,
+  },
+  searchSection: {
+    marginTop: 12,
+  },
+  searchInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    borderRadius: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+  },
+  searchInput: {
+    flex: 1,
+    color: 'white',
+    fontSize: 16,
+    marginLeft: 8,
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
+  },
+  controlsSection: {
+    marginTop: 12,
+  },
+  controlsScrollView: {
+    flexGrow: 0,
+  },
+  filterPill: {
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    borderRadius: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    marginRight: 8,
+  },
+  filterPillActive: {
+    backgroundColor: '#667eea',
+  },
+  filterPillText: {
+    color: 'rgba(255,255,255,0.8)',
+    fontSize: 14,
+    fontWeight: '600',
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
+  },
+  filterPillTextActive: {
+    color: 'white',
+  },
+  sortControlsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 8,
+    paddingLeft: 8,
+    borderLeftWidth: 1,
+    borderLeftColor: 'rgba(255,255,255,0.2)',
+  },
+  sortPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderRadius: 16,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    marginRight: 6,
+  },
+  sortPillActive: {
+    backgroundColor: 'rgba(102, 126, 234, 0.3)',
+    borderWidth: 1,
+    borderColor: '#667eea',
+  },
+  sortPillText: {
+    color: 'rgba(255,255,255,0.8)',
+    fontSize: 12,
+    fontWeight: '600',
+    marginLeft: 4,
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
+  },
+  sortPillTextActive: {
+    color: '#667eea',
+  },
+  sortOrderButton: {
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderRadius: 16,
+    padding: 6,
+    marginLeft: 4,
+  },
+  resultsSummary: {
+    marginTop: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    backgroundColor: 'rgba(52, 199, 89, 0.2)',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(52, 199, 89, 0.3)',
+  },
+  resultsText: {
+    color: '#34C759',
+    fontSize: 14,
+    fontWeight: '600',
+    textAlign: 'center',
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'Roboto',
   },
 });
 
