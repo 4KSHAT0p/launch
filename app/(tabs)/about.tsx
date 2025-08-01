@@ -40,18 +40,34 @@ export default function AboutUs() {
             resizeMode="contain"
           />
         </View>
-
-        {/* Mission Section */}
+        {/* Key Features Section */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Our Mission</Text>
-          <Text style={styles.description}>
-            To create smart, reliable tools that make everyday tasks easier for our people.
-          </Text>
+          <Text style={styles.sectionTitle}>Key Features</Text>
+
+          <View style={styles.keyFeatureItem}>
+            <Ionicons name="shield-checkmark" size={20} color="#5DADE2" />
+            <Text style={styles.keyFeatureText}>Your Data Stays with You Only</Text>
+          </View>
+          <View style={styles.keyFeatureItem}>
+            <Ionicons name="location-outline" size={20} color="#5DADE2" />
+            <Text style={styles.keyFeatureText}>Automatic GPS tagging</Text>
+          </View>
+
+          <View style={styles.keyFeatureItem}>
+            <Ionicons name="partly-sunny" size={20} color="#5DADE2" />
+            <Text style={styles.keyFeatureText}>Weather integration</Text>
+          </View>
+
+          <View style={styles.keyFeatureItem}>
+            <Ionicons name="search" size={20} color="#5DADE2" />
+            <Text style={styles.keyFeatureText}>Smart search & filtering</Text>
+          </View>
         </View>
+
 
         {/* Contact & Support Section */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Contact & Support</Text>
+          <Text style={styles.sectionTitle}>Contact Us</Text>
 
           <View style={styles.contactItem}>
             <View style={styles.contactIcon}>
@@ -106,30 +122,13 @@ export default function AboutUs() {
             </View>
           </View>
         </View>
-        {/* Key Features Section */}
+        {/* Mission Section */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Key Features</Text>
-
-          <View style={styles.keyFeatureItem}>
-            <Ionicons name="shield-checkmark" size={20} color="#5DADE2" />
-            <Text style={styles.keyFeatureText}>Your Data Stays with You Only</Text>
-          </View>
-          <View style={styles.keyFeatureItem}>
-            <Ionicons name="location-outline" size={20} color="#5DADE2" />
-            <Text style={styles.keyFeatureText}>Automatic GPS tagging</Text>
-          </View>
-
-          <View style={styles.keyFeatureItem}>
-            <Ionicons name="partly-sunny" size={20} color="#5DADE2" />
-            <Text style={styles.keyFeatureText}>Weather integration</Text>
-          </View>
-
-          <View style={styles.keyFeatureItem}>
-            <Ionicons name="search" size={20} color="#5DADE2" />
-            <Text style={styles.keyFeatureText}>Smart search & filtering</Text>
-          </View>
+          <Text style={styles.sectionTitle}>Our Mission</Text>
+          <Text style={styles.description}>
+            To create smart, reliable tools that make everyday tasks easier for our people.
+          </Text>
         </View>
-
         {/* Footer */}
         <View style={styles.footer}>
           <Text style={styles.footerText}>

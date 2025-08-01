@@ -46,6 +46,7 @@ export default function Index() {
   const [saveToDeviceLoading, setSaveToDeviceLoading] = useState(false);
   const [currentGif, setCurrentGif] = useState(GIFS[0]);
   const [cameraButtonPressed, setCameraButtonPressed] = useState(false);
+  const [flash, setFlash] = useState<'off' | 'on'>('off');
   const cameraRef = useRef<any>(null);
   const { hideTabBar, showTabBar } = useTabBarVisibilityContext();
 
@@ -194,6 +195,11 @@ export default function Index() {
   function toggleCameraFacing() {
     setFacing((current) => (current === "back" ? "front" : "back"));
   }
+
+  // Toggle flash mode
+  const toggleFlash = () => {
+    setFlash((prev) => (prev === 'off' ? 'on' : 'off'));
+  };
 
   // Take a picture handler
   const takePicture = async () => {
@@ -356,6 +362,7 @@ export default function Index() {
               style={StyleSheet.absoluteFill}
               facing={facing}
               ref={cameraRef}
+              flash={flash}
             />
             <View pointerEvents="box-none" style={StyleSheet.absoluteFill}>
               <View style={styles.locationOverlay}>
@@ -370,28 +377,34 @@ export default function Index() {
                 )}
               </View>
               <View style={styles.buttonContainer}>
+                {/* Camera Reverse Button - icon only, no white circle */}
                 <TouchableOpacity
-                  style={styles.button}
+                  style={styles.iconButton}
                   onPress={toggleCameraFacing}
                 >
                   <Ionicons name="camera-reverse" size={28} color="white" />
                 </TouchableOpacity>
+                {/* Middle capture button as a white circle */}
                 <TouchableOpacity
-                  style={styles.button}
+                  style={styles.captureCircle}
                   onPress={takePicture}
                   disabled={saving}
+                  activeOpacity={0.7}
                 >
-                  {saving ? (
-                    <ActivityIndicator color="white" size="large" />
-                  ) : (
-                    <Ionicons name="camera-outline" size={48} color="white" />
+                  {saving && (
+                    <ActivityIndicator color="#4A90E2" size="large" />
                   )}
                 </TouchableOpacity>
+                {/* Flash Toggle Button - icon only, no white circle */}
                 <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => setCameraVisible(false)}
+                  style={styles.iconButton}
+                  onPress={toggleFlash}
                 >
-                  <Ionicons name="close" size={28} color="white" />
+                  <Ionicons
+                    name={flash === 'on' ? "flash" : "flash-off"}
+                    size={28}
+                    color={flash === 'on' ? "#FFD600" : "white"}
+                  />
                 </TouchableOpacity>
               </View>
             </View>
@@ -403,7 +416,6 @@ export default function Index() {
 }
 
 const styles = StyleSheet.create({
-  // Existing styles
   container: {
     flex: 1,
     justifyContent: "center",
@@ -417,16 +429,30 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     left: 0,
     right: 0,
-    bottom: 32,
+    bottom: '8%',
     justifyContent: "space-evenly",
     alignItems: "flex-end",
     zIndex: 2,
   },
-  button: {
+  // iconButton is used for camera-reverse and flash buttons
+  iconButton: {
     alignItems: "center",
-    marginHorizontal: 12,
-    minWidth: 60,
     justifyContent: "center",
+    marginHorizontal: 12,
+    width: 48,
+    height: 48,
+  },
+  // captureCircle is used for the main capture button
+  captureCircle: {
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+    backgroundColor: "white",
+    borderWidth: 3,
+    borderColor: "#bbb",
+    alignItems: "center",
+    justifyContent: "center",
+    marginHorizontal: 12,
   },
   locationOverlay: {
     position: "absolute",
@@ -517,8 +543,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
   },
-
-  // New Home Screen Styles
   homeScrollView: {
     flex: 1,
     backgroundColor: "#EBF3FD",
@@ -538,7 +562,6 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
     overflow: 'hidden',
   },
-  // GIF container style
   gifContainer: {
     width: Dimensions.get('window').width,
     height: 250,
@@ -579,7 +602,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     fontWeight: "normal"
   },
-  // Camera Action Bar Styles
   cameraActionBar: {
     position: "absolute",
     bottom: 32,
